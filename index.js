@@ -6,6 +6,8 @@ import transactionRoutes from './Routes/Routes.js';
 import userRoutes from './Routes/Routes.js';
 import bodyParser from 'body-parser';
 import corsOptions from './corsConfig.js'; // Import the CORS configuration
+import softcodeRoutes from './Routes/softcodeRoutes.js';
+
 
 dotenv.config();
 
@@ -27,6 +29,9 @@ app.use(cors(corsOptions)); // Apply the CORS middleware
 // Routes
 app.use('/api', transactionRoutes);  // Handles transactions
 app.use('/api/users', userRoutes);   // Handles user-related operations
+
+// Use the softcode routes
+app.use('/api', softcodeRoutes); 
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
