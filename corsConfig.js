@@ -11,7 +11,7 @@
 const corsOptions = {
     origin: (origin, callback) => {
         const allowedOrigins = [
-            'http://127.0.0.1:5501',  // Local development URL
+            'http://127.0.0.1:5500',  // Local development URL
             'https://hongleongbank.vercel.app' // Your production frontend URL
         ];// Add your frontend origin(s) here
         if (!origin || allowedOrigins.includes(origin)) {
