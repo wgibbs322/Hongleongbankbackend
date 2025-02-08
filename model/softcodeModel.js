@@ -1,13 +1,17 @@
-// model/softcodeModel.js
+// models/Softcode.js
+import mongoose from 'mongoose';
 
-// In-memory storage for the softcode message (can be replaced with a database)
-let softcodeMessage = null;
+const { Schema, model } = mongoose;
 
-export const getSoftcodeMessage = () => {
-  return softcodeMessage;
-};
+const softcodeSchema = new Schema({
+    message: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true // Adds createdAt and updatedAt fields automatically
+});
 
-export const updateSoftcodeMessage = (newMessage) => {
-  softcodeMessage = newMessage;
-  return softcodeMessage;
-};
+const Softcode = model('Softcode', softcodeSchema);
+
+export default Softcode;

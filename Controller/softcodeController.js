@@ -1,25 +1,38 @@
 // controllers/softcodeController.js
-import { getSoftcodeMessage, updateSoftcodeMessage } from '../model/softcodeModel.js';
+import Softcode from '../model/softcodeModel.js';
 
-// Controller method to update the softcode message
-export const updateSoftcode = (req, res) => {
-  const { newMessage } = req.body;
-
-  if (newMessage) {
-    const updatedMessage = updateSoftcodeMessage(newMessage);
-    return res.status(200).json({ message: 'Softcode message updated successfully!', softcodeMessage: updatedMessage });
-  }
-
-  return res.status(400).json({ error: 'New message is required' });
+// Get the current softcode message
+export const getSoftcodeMessage = async (req, res) => {
+    try {
+        const softcode = await Softcode.findOne(); // Get the first softcode document
+        if (softcode) {
+            res.json({ message: softcode.message });
+        } else {
+            res.status(404).json({ error: 'Softcode message not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch softcode message' });
+    }
 };
 
-// Controller method to get the current softcode message
-export const getSoftcode = (req, res) => {
-  const softcodeMessage = getSoftcodeMessage();
-  
-  if (softcodeMessage === null) {
-    return res.status(404).json({ error: 'No softcode message found' });
-  }
+// Update or create a new softcode message
+export const updateSoftcodeMessage = async (req, res) => {
+    const { newMessage } = req.body;
 
-  return res.status(200).json({ message: softcodeMessage });
+    try {
+        // Check if a softcode already exists
+        const softcode = await Softcode.findOne();
+        if (softcode) {
+            softcode.message = newMessage; // Update the existing message
+            await softcode.save();
+            res.json({ message: 'Softcode updated successfully', newMessage });
+        } else {
+            // Create a new softcode document
+            const newSoftcode = new Softcode({ message: newMessage });
+            await newSoftcode.save();
+            res.json({ message: 'Softcode created successfully', newMessage });
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update softcode message' });
+    }
 };
